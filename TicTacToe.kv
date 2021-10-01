@@ -1,0 +1,72 @@
+<GameWindow>:
+    #: set x 0
+    #: set o 0
+    GridLayout:
+        padding: 5
+        rows: 3
+        cols: 1
+        size: root.width, root.height
+        BoxLayout:
+            size: self.width, self.height
+            size_hint: 1,0.4
+            orientation: 'vertical'
+            MDToolbar:
+                title: 'TicTacToe Game'
+                size: self.width, self.height
+                size_hint: 1, 0.8
+            GridLayout:
+                rows: 1
+                cols: 2
+                MDLabel:
+                    id: x_win
+                    text: f"X Wins:{x}"
+                    halign: 'left'
+                    valign: 'center'
+                    padding_x: 10
+                MDLabel:
+                    id: o_win
+                    text: f"O Wins:{o}"
+                    halign: 'right'
+                    valign: 'bottom'
+                    padding_x: 10
+        GridLayout:
+            padding: 2
+            rows: 3
+            cols: 3
+            size: self.width, self.height
+            Button:
+                id: b1
+                on_press: app.Win(x)
+            Button:
+                id: b2
+                on_press: app.Win(self)
+            Button:
+                id: b3
+                on_press: app.Win(self)
+            Button:
+                id: b4
+                on_press: app.Win(self)
+            Button:
+                id: b5
+                on_press: app.Win(self)
+            Button:
+                id: b6
+                on_press: app.Win(self)
+            Button:
+                id: b7
+                on_press: app.Win(self)
+            Button:
+                id: b8
+                on_press: app.Win(self)
+            Button:
+                id: b9
+                on_press: app.Win(self)
+        FloatLayout:
+            size: max(root.size), max(root.size)
+            size_hint: 0.2, 0.1
+            Button:
+                text: 'Restart Game'
+                size: self.width, self.height
+                size_hint: 0.3, 0.8
+                pos_hint :{'center_x': .5, 'center_y': .5}
+                on_press: app.Restart(b1,b2,b3,b4,b5,b6,b7,b8,b9)
