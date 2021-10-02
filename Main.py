@@ -1,14 +1,21 @@
 from kivy.core.text import Label
 from kivy.core.window import Window
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty, NumericProperty
 from kivymd.app import MDApp
-from kivy.factory import Factory
+
+
+class InvalidPopup(FloatLayout):
+    pass
 
 
 class GameWindow(Widget):
     Window.size = (500, 500)
+    InvalidPopupShow = InvalidPopup()
+    popupWindow = Popup(title="Invalid Move", content=InvalidPopupShow, size_hint=(None, None), size=(400, 300),
+                        auto_dismiss=False)
     b1 = ObjectProperty(None)
     b2 = ObjectProperty(None)
     b3 = ObjectProperty(None)
@@ -24,8 +31,7 @@ class GameWindow(Widget):
 
     def Play(self, button, *args):
         if button.text != "":
-            popup = Popup(title='Invalid Move', content=Label(text="You cannot place a mark there!"), size_hint=(0.6, 0.2), pos_hint=(0.5,0.5), auto_dismiss=False)
-            popup.open(self)
+            self.popupWindow.open()
         else:
             if self.playerTimer % 2 == 0:
                 button.text = "X"
@@ -72,16 +78,20 @@ class GameWindow(Widget):
             self.o_win += 1
             print('O Wins')
 
-
     def Restart(self, *args):
         for x in args:
             x.text = ""
 
+    def InvalidMovePopup(self):
+        self.popupWindow.open()
+
+    def InvalidMovePopupClose(self):
+        self.popupWindow.dismiss()
+
+
 class TicTacToeApp(MDApp):
     def build(self):
         return GameWindow()
-
-
 
 
 if __name__ == "__main__":
