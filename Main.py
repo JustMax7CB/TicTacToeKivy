@@ -64,7 +64,7 @@ class GameWindow(Widget):
 
     def Win(self):
         if self.playerTimer % 2 == 0:
-            self.x_win = str(int(self.x_win) + 1)
+            self.ids.x_win_label.text = str(int(self.x_win) + 1)
             print('X Wins')
         else:
             self.o_win = str(int(self.o_win) + 1)
