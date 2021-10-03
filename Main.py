@@ -1,5 +1,6 @@
-from kivy.core.text import Label
+import threading
 from kivy.core.window import Window
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
@@ -11,11 +12,15 @@ class InvalidPopup(FloatLayout):
     pass
 
 
+class EndGame(BoxLayout):
+    pass
+
+
 class GameWindow(Widget):
     Window.size = (500, 500)
     InvalidPopupShow = InvalidPopup()
-    popupWindow = Popup(title="Invalid Move", content=InvalidPopupShow, size_hint=(None, None), size=(400, 300),
-                        auto_dismiss=False)
+    InvalidpopupWindow = Popup(title="Invalid Move", content=InvalidPopupShow, size_hint=(None, None), size=(200, 100))
+
     b1 = ObjectProperty(None)
     b2 = ObjectProperty(None)
     b3 = ObjectProperty(None)
@@ -28,10 +33,27 @@ class GameWindow(Widget):
     x_win = NumericProperty()
     o_win = NumericProperty()
     playerTimer = NumericProperty()
+    WinFlag = False
+    
+    def restart(self, *args):
+        for x in args:
+            x.text = ""
+        self.playerTimer = 0
+        
+    def WinFlagMethod(self, winner):
+        if self.WinFlag:
+            self.WinFlag = False
+        EndGamePopup = EndGame()
+        EndGamePopupWindow = Popup(title=f"{winner} has won the game!", content=EndGamePopup, size_hint=(None, None),
+                                   size=(200, 100))
+        EndGamePopupWindow.bind(on_dismiss=self.restart(self.b1,self.b2,self.b3,self.b4,self.b5,self.b6,self.b7,self.b8,self.b9))
+        EndGamePopupWindow.open()
+
+
 
     def Play(self, button, *args):
         if button.text != "":
-            self.popupWindow.open()
+            self.InvalidpopupWindow.open()
         else:
             if self.playerTimer % 2 == 0:
                 button.text = "X"
@@ -73,20 +95,19 @@ class GameWindow(Widget):
             self.ids.x_win_label.text = f"X Wins:{str(int(self.x_win) + 1)}"
             self.x_win += 1
             print('X Wins')
+            self.WinFlag = True
+            self.WinFlagMethod("X")
+
+
+
         else:
             self.ids.o_win_label.text = f"O Wins:{str(int(self.o_win) + 1)}"
             self.o_win += 1
             print('O Wins')
+            self.WinFlag = True
+            self.WinFlagMethod("O")
 
-    def Restart(self, *args):
-        for x in args:
-            x.text = ""
-
-    def InvalidMovePopup(self):
-        self.popupWindow.open()
-
-    def InvalidMovePopupClose(self):
-        self.popupWindow.dismiss()
+    
 
 
 class TicTacToeApp(MDApp):
